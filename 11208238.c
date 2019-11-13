@@ -72,26 +72,35 @@ bool atenderPrimeiraDaFila(PFILA f, int* id){
 	if (tamanho(f) == 0) {
 		return false;
 	} else if (f->cabeca->ant == f->cabeca->prox) {
-		id = f->cabeca->prox->id;  
+		id = f->cabeca->prox->id;
 		f->inicioNaoPref = f->cabeca;
 		f->cabeca->id = -1;
-		f->cabeca->idade = -1;    
-		f->cabeca->ant = f->cabeca;    
-		f->cabeca->prox = f->cabeca; 
+		f->cabeca->idade = -1;
+		f->cabeca->ant = f->cabeca;
+		f->cabeca->prox = f->cabeca;
 	} else {
-		if (f->inicioNaoPref == f->cabeca->prox) f->inicioNaoPref = f->cabeca->prox->prox; 
+	    id = f->cabeca->prox->id;
+		if (f->inicioNaoPref == f->cabeca->prox) f->inicioNaoPref = f->cabeca->prox->prox;
 		aux = f->cabeca->prox;
 		f->cabeca->prox = f->cabeca->prox->prox;
 		f->cabeca->prox->ant = aux->ant;
-		free(aux);
-	} 
+	}
+    free(aux);
 	return true;
 }
 
 
 bool desistirDaFila(PFILA f, int id){
+    PONT aux = buscarID(f,id);
+    if (pont == NULL) return false;
+    if (aux == f->cabeca->prox) atenderPrimeiraDaFila(f, id);
+    else {
+        if (aux == f->inicioNaoPref) f->inicioNaoPref = f->cabeca->prox->prox;
+        aux = f->cabeca->prox;
+		f->cabeca->prox = f->cabeca->prox->prox;
+		f->cabeca->prox->ant = aux->ant;
+    }
 
-
-
-	return false;
+    free(aux);
+	return true;
 }
